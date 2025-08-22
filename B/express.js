@@ -1,22 +1,24 @@
+import axios from "axios";
 import express from "express";
 import cors from "cors";
-import axios from "axios";
 
-const app = express();
-
-// Enable CORS for all routes
-app.use(cors());
-
-app.get("/api/products", async (req, res) => {
+const app1 = express();
+app1.use(cors());
+app1.get("/api/products", async (request, response) => {
   try {
-    const fdata = await axios.get("https://fakestoreapi.com/products");
-    res.json(fdata.data);
+    const fdata = await axios.get("https://fakestoreapi.com/products"); // fetch API data
+    const fdatta = fdata.data; // axios gives data here
+
+    // fakestoreapi returns an array directly, so no need for .products
+    response.json(fdatta); 
   } catch (error) {
-    res.status(500).json({ error: "Failed to fetch products" });
+    console.error("Error fetching data:", error.message);
+    response.status(500).json({ error: "Failed to fetch products" });
   }
 });
 
 const PORT = 3000;
-app.listen(PORT, () => {
-  console.log(`✅ Server running on http://localhost:${PORT}`);
+
+app1.listen(PORT, () => {
+  console.log(`✅ Server is running on http://localhost:${PORT}`);
 });
